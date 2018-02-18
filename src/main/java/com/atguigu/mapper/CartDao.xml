@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper SYSTEM "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.atguigu.mapper.CartDao">
+
+
+<!-- 	int countCartById(Integer id);
+ -->
+	<select id="countCartById" resultType="java.lang.Integer">
+		select count(*) from t_mall_shoppingCar where yh_id=#{yhId} 
+	</select>
+	
+	<!-- insertCart -->
+	<insert id="insertCart" parameterType="com.atguigu.bean.t_mall_shoppingcar">
+		insert into t_mall_shoppingcar (sku_mch,sku_jg,tjshl,hj,yh_id,shp_id,sku_id,shp_tp,kcdz)
+			values(#{skuMch},#{skuJg},#{tjshl},#{hj},#{yhId},#{shpId},#{skuId},#{shpTp},#{kcdz});
+	</insert>
+	
+	<!-- selectAll by yhId-->
+	<select id="selectAll" resultType="com.atguigu.bean.t_mall_shoppingcar">
+		select * from t_mall_shoppingcar where yh_id=#{yhId}
+	</select>
+	
+	<!-- update_cart -->
+	
+	<update id="update_cart" parameterType="com.atguigu.bean.t_mall_shoppingcar">
+		update t_mall_shoppingcar 
+		<set>
+			<if test="tjshl!=0">
+				tjshl = #{tjshl},
+			</if>
+			<if test="hj!=0">
+				hj = #{hj},	
+			</if>
+			<if test="shfxz!=null and shfxz!=''">
+				shfxz = #{shfxz},
+			</if>
+		</set>
+		where sku_id=#{skuId}
+	</update>
+	
+	<!-- 	List<t_mall_shoppingcar> getUserDBbyId(Integer id);
+	 -->
+	<select id="getUserDBbyId" resultType="com.atguigu.bean.t_mall_shoppingcar">
+		select * from t_mall_shoppingcar where yh_id=#{id}
+	</select>
+
+</mapper>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper SYSTEM "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.atguigu.mapper.SkuListMapper">
+
+
+
+
+
+<!-- 
+	<select id="select_skus_list_by_attr" resultMap="mall_sku_spu_tm_maping"
+		parameterType="Map">
+		SELECT sku.`Id` skuId,spu.`Id` spuId,tm.`Id` tmId,
+			sku.*,spu.*,tm.* 
+				FROM `t_mall_sku` sku,
+				     `t_mall_trade_mark` tm,
+					 `t_mall_product` spu
+					  	WHERE tm.`Id`=spu.`pp_id` 
+					  	AND sku.`shp_id`=spu.`Id` 
+						AND spu.`flbh2`=#{class_2_id}
+						${sql}
+	</select>
+	
+	<resultMap type="com.atguigu.bean.Model_sku" id="mall_sku_spu_tm_maping"
+		autoMapping="true">
+		<id column="skuId" property="id"/>
+		<association property="mall_product" autoMapping="true" javaType="com.atguigu.bean.t_mall_product">
+			<id column="spuId" property="id"/>
+		</association>
+		<association property="mall_trade_mark" autoMapping="true" javaType="com.atguigu.bean.t_mall_trade_mark">
+			<id column="tmId" property="id"/>
+		</association>
+</resultMap>
+
+ -->
+
+
+
+
+
+
+
+
+	<!-- //根据指定的class_2_id获得当前分类的所有sku List<Model_sku> selectSkusByClass2id(int 
+		class_2_id); -->
+	<select id="selectSkusByClass2id" resultMap="mall_sku_spu_tm_maping"
+		parameterType="int">
+		SELECT sku.`Id` skuId,spu.`Id` spuId,tm.`Id` tmId,
+			sku.*,spu.*,tm.* 
+				FROM `t_mall_sku` sku,
+				     `t_mall_trade_mark` tm,
+					 `t_mall_product` spu
+					  	WHERE tm.`Id`=spu.`pp_id` 
+					  	AND sku.`shp_id`=spu.`Id` 
+						AND spu.`flbh2`=#{class_2_id}
+	</select>
+	
+	<resultMap type="com.atguigu.bean.Model_sku" id="mall_sku_spu_tm_maping"
+		autoMapping="true">
+		<id column="skuId" property="id"/>
+		<association property="mall_product" autoMapping="true" javaType="com.atguigu.bean.t_mall_product">
+			<id column="spuId" property="id"/>
+		</association>
+		<association property="mall_trade_mark" autoMapping="true" javaType="com.atguigu.bean.t_mall_trade_mark">
+			<id column="tmId" property="id"/>
+		</association>
+	</resultMap>
+
+
+
+
+</mapper>

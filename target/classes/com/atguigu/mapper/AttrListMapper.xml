@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper SYSTEM "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.atguigu.mapper.AttrListMapper">
+
+<!-- 	//跳到单个商品界面的时候需要调用的商品分类属性方法
+	List<t_mall_sku> select_skus_by_spuId(int spuId);
+	 -->
+	 <select id="select_skus_by_spuId" resultType="com.atguigu.bean.t_mall_sku">
+	 	select * from t_mall_sku where shp_id=#{spuId} 
+	 </select>
+
+<!-- //跳到单个商品界面的时候需要调用的查询单个商品的细节属性的方法
+	DETAIL_t_mall_sku select_detail_sku_by_skuId_spuId(Map<Object, Object> map);
+	 -->
+	  <select id="select_detail_sku_by_skuId_spuId" parameterType="Map" resultMap="DETAIL_t_mall_sku_mapping">
+	 	select attr.shxm_mch as
+		attrName,CONCAT(val.shxzh,val.shxzh_mch) as
+		valueName ,sku.id as sku_id
+		,spu.id as
+		spu_id,img.Id as
+		img_id,spu.*,img.*,sku.* from
+		t_mall_product
+		spu,
+		t_mall_sku
+		sku,
+		t_mall_product_image img,
+		t_mall_sku_attr_value av,
+		t_mall_attr
+		attr,
+		t_mall_value val
+		where spu.Id
+		= sku.shp_id AND
+		spu.Id =
+		img.shp_id
+		AND
+		sku.id = av.sku_id AND
+		av.shxm_id = attr.id AND
+		av.shxzh_id = val.id
+		and attr.id = val.shxm_id and
+		sku.id = #{skuId}
+	 </select>
+	 <resultMap type="com.atguigu.bean.DETAIL_t_mall_sku" id="DETAIL_t_mall_sku_mapping" autoMapping="true">
+	 	<id column="sku_id" property="id"/>
+	 	<association property="spu" javaType="com.atguigu.bean.t_mall_product" autoMapping="true">
+		 	<id column="spu_id" property="id"/>
+	 	</association>
+	 	<collection property="list_image" ofType="com.atguigu.bean.t_mall_product_image" autoMapping="true">
+			<result column="img_id" property="id" />
+	 	</collection>
+
+	 	<collection property="list_av_name" ofType="com.atguigu.bean.OBJECT_T_MALL_AV_NAME" autoMapping="true">
+	 	</collection>
+	 	
+	 </resultMap>
+
+	<!-- List<OBJECT_T_MALL_ATTR> selectAttrByClass_2_id(int class_2_id); -->
+	<select id="selectAttrByClass_2_id" parameterType="int"
+		resultMap="select_attr_by_class_2_id_map">
+		select attr.id as attr_id ,val.id as value_id ,attr.*,val.*
+		from t_mall_attr attr,t_mall_value val where
+		attr.id = val.shxm_id and
+		attr.flbh2 = #{class_2_id}
+	</select>
+
+	<resultMap type="com.atguigu.bean.OBJECT_T_MALL_ATTR" id="select_attr_by_class_2_id_map"
+		autoMapping="true">
+		<id column="attr_id" property="id" />
+		<result column="shxm_mch" property="shxmMch" />
+		<collection property="t_mall_value_list" ofType="com.atguigu.bean.t_mall_value"
+			autoMapping="true">
+			<id column="value_id" property="id" /><!-- 
+			<result column="shxzh" property="shxzh" />
+			<result column="shxm_id" property="shxmId" />
+			<result column="shxzh_mch" property="shxzhMch" /> -->
+		</collection>
+	</resultMap>
+</mapper>
